@@ -1,0 +1,35 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "SnapshotAndImageDiscovery",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeSnapshots",
+        "ec2:DescribeImages",
+        "ec2:RegisterImage",
+        "ec2:CreateImage"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "LaunchRestoredInstance",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:RunInstances",
+        "ec2:CreateTags"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchLogsWrite",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:*:*:*"
+    }
+  ]
+}
