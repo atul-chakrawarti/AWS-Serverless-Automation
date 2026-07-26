@@ -9,8 +9,8 @@
         "s3:DeleteObject"
       ],
       "Resource": [
-        "arn:aws:s3:::REPLACE_WITH_BUCKET_NAME",
-        "arn:aws:s3:::REPLACE_WITH_BUCKET_NAME/*"
+        "arn:aws:s3:::atulchakrawarti",
+        "arn:aws:s3:::atulchakrawarti/*"
       ]
     },
     {
