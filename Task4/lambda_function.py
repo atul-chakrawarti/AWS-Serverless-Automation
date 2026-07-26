@@ -5,7 +5,8 @@ Queries month-to-date UnblendedCost via the Cost Explorer API and
 publishes an SNS alert if spend exceeds a configured threshold.
 
 Environment variables:
-    SNS_TOPIC_ARN     - ARN of the SNS topic to publish alerts to (required)
+    SNS_TOPIC_ARN     - ARN of the SNS topic to publish alerts to (falls
+                        back to DEFAULT_SNS_TOPIC_ARN below if not set)
     COST_THRESHOLD_USD - Dollar threshold to alert on (default: "50")
 
 Note: Cost Explorer's ce:GetCostAndUsage is billed per API call
@@ -19,6 +20,9 @@ from datetime import date, timedelta
 
 ce_client = boto3.client("ce")
 sns_client = boto3.client("sns")
+
+# Default topic used for this deployment; override via SNS_TOPIC_ARN env var
+DEFAULT_SNS_TOPIC_ARN = "arn:aws:sns:us-east-1:280768229384:aws-cost-alerts"
 
 
 def get_month_to_date_cost():
@@ -42,9 +46,7 @@ def get_month_to_date_cost():
 
 
 def lambda_handler(event, context):
-    topic_arn = os.environ.get("SNS_TOPIC_ARN")
-    if not topic_arn:
-        raise ValueError("SNS_TOPIC_ARN environment variable is required")
+    topic_arn = os.environ.get("SNS_TOPIC_ARN", DEFAULT_SNS_TOPIC_ARN)
 
     threshold = float(os.environ.get("COST_THRESHOLD_USD", "50"))
 

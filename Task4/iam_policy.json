@@ -15,7 +15,7 @@
       "Action": [
         "sns:Publish"
       ],
-      "Resource": "arn:aws:sns:us-east-1:REPLACE_WITH_ACCOUNT_ID:REPLACE_WITH_TOPIC_NAME"
+      "Resource": "arn:aws:sns:us-east-1:280768229384:aws-cost-alerts"
     },
     {
       "Sid": "CloudWatchLogsWrite",
