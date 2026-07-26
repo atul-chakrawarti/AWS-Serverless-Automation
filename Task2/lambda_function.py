@@ -6,7 +6,8 @@ snapshots (owned by this account, tagged CreatedBy=Lambda-Backup) that
 are older than a retention period.
 
 Environment variables:
-    VOLUME_ID         - EBS volume ID to snapshot (required), e.g. vol-0abc123
+    VOLUME_ID         - EBS volume ID to snapshot (falls back to
+                        DEFAULT_VOLUME_ID below if not set)
     RETENTION_DAYS    - Age threshold for cleanup in days (default: 30)
     RETENTION_MINUTES - Optional override for quick testing
 """
@@ -19,6 +20,9 @@ ec2_client = boto3.client("ec2")
 
 TAG_KEY = "CreatedBy"
 TAG_VALUE = "Lambda-Backup"
+
+# Default volume used for this deployment; override via VOLUME_ID env var
+DEFAULT_VOLUME_ID = "vol-0b5b3717a57a66d22"
 
 
 def get_cutoff_time():
@@ -76,9 +80,7 @@ def cleanup_old_snapshots(cutoff_time):
 
 
 def lambda_handler(event, context):
-    volume_id = os.environ.get("VOLUME_ID")
-    if not volume_id:
-        raise ValueError("VOLUME_ID environment variable is required")
+    volume_id = os.environ.get("VOLUME_ID", DEFAULT_VOLUME_ID)
 
     cutoff_time = get_cutoff_time()
     print(f"Volume: {volume_id}")
