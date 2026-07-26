@@ -1,22 +1,11 @@
-"""
-Task 1: Automated S3 Bucket Cleanup (Objects Older Than 30 Days)
-
-Deletes objects in a target S3 bucket whose LastModified timestamp is
-older than a configurable retention period (default 30 days).
-
-Environment variables:
-    BUCKET_NAME     - Name of the S3 bucket to clean up (required)
-    RETENTION_DAYS  - Age threshold in days (default: 30). For testing,
-                      you can temporarily use RETENTION_MINUTES instead.
-    RETENTION_MINUTES - Optional override for quick testing (e.g. "5").
-                         If set, this takes precedence over RETENTION_DAYS.
-"""
-
 import os
 import boto3
 from datetime import datetime, timedelta, timezone
 
 s3_client = boto3.client("s3")
+
+# Hardcoded bucket name
+DEFAULT_BUCKET_NAME = "atulchakrawarti"
 
 
 def get_cutoff_time():
@@ -31,9 +20,7 @@ def get_cutoff_time():
 
 
 def lambda_handler(event, context):
-    bucket_name = os.environ.get("BUCKET_NAME")
-    if not bucket_name:
-        raise ValueError("BUCKET_NAME environment variable is required")
+    bucket_name = os.environ.get("BUCKET_NAME", DEFAULT_BUCKET_NAME)
 
     cutoff_time = get_cutoff_time()
     print(f"Bucket: {bucket_name}")
